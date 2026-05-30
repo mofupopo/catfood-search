@@ -1,0 +1,169 @@
+
+  :root {
+    --cream: #FDF6EC;
+    --warm: #F5E6C8;
+    --accent: #E07B39;
+    --accent2: #6BAE8E;
+    --dark: #2D2416;
+    --mid: #7A6347;
+    --light: #C9A97A;
+    --card-bg: #FFFBF4;
+    --tag-bg: #FFF0DC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--dark);
+    padding: 28px 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, #E07B3930 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -20px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, #6BAE8E25 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .logo {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .logo span { color: var(--accent); }
+  .tagline {
+    font-size: 0.8rem;
+    color: var(--light);
+    margin-top: 4px;
+    letter-spacing: 0.1em;
+  }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 640px) {
+    .container { grid-template-columns: 1fr; }
+  }
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
+  .filter-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 18px;
+    border: 1.5px solid var(--warm);
+    box-shadow: 0 2px 8px #2D241608;
+  }
+  .filter-title {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--mid);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-options { display: flex; flex-direction: column; gap: 8px; }
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.15s;
+    font-size: 0.88rem;
+  }
+  .filter-option:hover { background: var(--warm); }
+  .filter-option input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .reset-btn {
+    background: none;
+    border: 1.5px solid var(--light);
+    color: var(--mid);
+    border-radius: 99px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+  .reset-btn:hover {
+    background: var(--warm);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .result-meta {
+    font-size: 0.82rem;
+    color: var(--mid);
+    margin-bottom: 14px;
+    padding: 0 2px;
+  }
+  .result-meta strong { color: var(--accent); }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .product-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 18px;
+    border: 1.5px solid var(--warm);
+    box-shadow: 0 2px 10px #2D241608;
+    transition: transform 0.18s, box-shadow 0.18s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px #2D241614;
+  }
+  .card-emoji { font-size: 2.2rem; text-align: center; line-height: 1; margin-bottom: 4px; }
+  .card-brand { font-size: 0.72rem; color: var(--light); font-weight: 500; letter-spacing: 0.08em; }
+  .card-name {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.4;
+  }
+  .card-price { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .card-price span { font-size: 0.72rem; color: var(--mid); font-weight: 400; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+  .tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 99px; font-weight: 500; }
+  .tag-age    { background: #FFF0DC; color: #A0610A; }
+  .tag-health { background: #E6F5EE; color: #2E7D55; }
+  .tag-origin { background: #EDF0FF; color: #3D5199; }
+  .tag-allergy { background: #FDECEA; color: #A83228; }
+  .no-result { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--mid); }
+  .no-result .big { font-size: 3rem; }
+  .no-result p { margin-top: 10px; font-size: 0.9rem; }
+  .loading { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--mid); font-size: 0.9rem; }
+  .error-msg { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #A83228; font-size: 0.9rem; background: #FDECEA; border-radius: 12px; }
