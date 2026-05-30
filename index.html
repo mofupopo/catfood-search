@@ -24,8 +24,6 @@
     color: var(--dark);
     min-height: 100vh;
   }
-
-  /* ヘッダー */
   header {
     background: var(--dark);
     padding: 28px 24px 20px;
@@ -63,8 +61,6 @@
     margin-top: 4px;
     letter-spacing: 0.1em;
   }
-
-  /* メインレイアウト */
   .container {
     max-width: 960px;
     margin: 0 auto;
@@ -76,13 +72,7 @@
   @media (max-width: 640px) {
     .container { grid-template-columns: 1fr; }
   }
-
-  /* サイドバー（フィルター） */
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
   .filter-card {
     background: var(--card-bg);
     border-radius: 16px;
@@ -100,7 +90,6 @@
     align-items: center;
     gap: 6px;
   }
-  .filter-title .icon { font-size: 1rem; }
   .filter-options { display: flex; flex-direction: column; gap: 8px; }
   .filter-option {
     display: flex;
@@ -136,9 +125,6 @@
     border-color: var(--accent);
     color: var(--accent);
   }
-
-  /* メインエリア */
-  .main {}
   .result-meta {
     font-size: 0.82rem;
     color: var(--mid);
@@ -146,13 +132,11 @@
     padding: 0 2px;
   }
   .result-meta strong { color: var(--accent); }
-
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
   }
-
   .product-card {
     background: var(--card-bg);
     border-radius: 18px;
@@ -168,20 +152,8 @@
     transform: translateY(-3px);
     box-shadow: 0 8px 24px #2D241614;
   }
-
-  .card-emoji {
-    font-size: 2.2rem;
-    text-align: center;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .card-brand {
-    font-size: 0.72rem;
-    color: var(--light);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .card-emoji { font-size: 2.2rem; text-align: center; line-height: 1; margin-bottom: 4px; }
+  .card-brand { font-size: 0.72rem; color: var(--light); font-weight: 500; letter-spacing: 0.08em; }
   .card-name {
     font-family: 'Zen Maru Gothic', sans-serif;
     font-size: 0.95rem;
@@ -189,38 +161,19 @@
     color: var(--dark);
     line-height: 1.4;
   }
-  .card-price {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--accent);
-  }
+  .card-price { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
   .card-price span { font-size: 0.72rem; color: var(--mid); font-weight: 400; }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 2px;
-  }
-  .tag {
-    font-size: 0.7rem;
-    padding: 3px 8px;
-    border-radius: 99px;
-    font-weight: 500;
-  }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+  .tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 99px; font-weight: 500; }
   .tag-age    { background: #FFF0DC; color: #A0610A; }
   .tag-health { background: #E6F5EE; color: #2E7D55; }
   .tag-origin { background: #EDF0FF; color: #3D5199; }
   .tag-allergy { background: #FDECEA; color: #A83228; }
-
-  .no-result {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--mid);
-  }
+  .no-result { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--mid); }
   .no-result .big { font-size: 3rem; }
   .no-result p { margin-top: 10px; font-size: 0.9rem; }
+  .loading { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--mid); font-size: 0.9rem; }
+  .error-msg { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #A83228; font-size: 0.9rem; background: #FDECEA; border-radius: 12px; }
 </style>
 </head>
 <body>
@@ -231,11 +184,9 @@
 </header>
 
 <div class="container">
-  <!-- フィルターパネル -->
   <aside class="sidebar">
-
     <div class="filter-card">
-      <div class="filter-title"><span class="icon">🐱</span> 年齢・ライフステージ</div>
+      <div class="filter-title"><span>🐱</span> 年齢・ライフステージ</div>
       <div class="filter-options" id="filter-age">
         <label class="filter-option"><input type="checkbox" value="子猫">子猫（〜1歳）</label>
         <label class="filter-option"><input type="checkbox" value="成猫">成猫（1〜7歳）</label>
@@ -243,9 +194,8 @@
         <label class="filter-option"><input type="checkbox" value="全年齢">全年齢対応</label>
       </div>
     </div>
-
     <div class="filter-card">
-      <div class="filter-title"><span class="icon">💪</span> 健康上の悩み</div>
+      <div class="filter-title"><span>💪</span> 健康上の悩み</div>
       <div class="filter-options" id="filter-health">
         <label class="filter-option"><input type="checkbox" value="肥満ケア">肥満ケア</label>
         <label class="filter-option"><input type="checkbox" value="毛球ケア">毛球ケア</label>
@@ -254,9 +204,8 @@
         <label class="filter-option"><input type="checkbox" value="皮膚・被毛">皮膚・被毛</label>
       </div>
     </div>
-
     <div class="filter-card">
-      <div class="filter-title"><span class="icon">🚫</span> 避けたい食材</div>
+      <div class="filter-title"><span>🚫</span> 避けたい食材</div>
       <div class="filter-options" id="filter-allergy">
         <label class="filter-option"><input type="checkbox" value="穀物不使用">穀物不使用</label>
         <label class="filter-option"><input type="checkbox" value="牛肉不使用">牛肉不使用</label>
@@ -264,175 +213,103 @@
         <label class="filter-option"><input type="checkbox" value="魚不使用">魚不使用</label>
       </div>
     </div>
-
     <div class="filter-card">
-      <div class="filter-title"><span class="icon">💰</span> 価格帯（1食あたり）</div>
+      <div class="filter-title"><span>💰</span> 価格帯（1食あたり）</div>
       <div class="filter-options" id="filter-price">
         <label class="filter-option"><input type="checkbox" value="low">〜100円</label>
         <label class="filter-option"><input type="checkbox" value="mid">100〜300円</label>
         <label class="filter-option"><input type="checkbox" value="high">300円〜</label>
       </div>
     </div>
-
     <div class="filter-card">
-      <div class="filter-title"><span class="icon">🌏</span> 産地</div>
+      <div class="filter-title"><span>🌏</span> 産地</div>
       <div class="filter-options" id="filter-origin">
         <label class="filter-option"><input type="checkbox" value="国産">国産</label>
         <label class="filter-option"><input type="checkbox" value="輸入品">輸入品</label>
       </div>
     </div>
-
     <button class="reset-btn" onclick="resetFilters()">🔄 フィルターをリセット</button>
   </aside>
 
-  <!-- 商品一覧 -->
-  <main class="main">
+  <main>
     <div class="result-meta" id="result-meta"></div>
-    <div class="cards" id="cards"></div>
+    <div class="cards" id="cards"><div class="loading">🐾 データを読み込み中...</div></div>
   </main>
 </div>
 
 <script>
-const products = [
-  {
-    id: 1,
-    emoji: "🐟",
-    brand: "ねこまんま",
-    name: "まぐろ贅沢仕立て 成猫用",
-    price: 89,
-    age: "成猫",
-    health: ["毛球ケア", "皮膚・被毛"],
-    avoidIngredients: ["穀物不使用"],
-    origin: "国産",
-    priceRange: "low"
-  },
-  {
-    id: 2,
-    emoji: "🍗",
-    brand: "キャットプレミアム",
-    name: "チキン＆野菜 子猫用",
-    price: 120,
-    age: "子猫",
-    health: ["皮膚・被毛"],
-    avoidIngredients: ["魚不使用"],
-    origin: "輸入品",
-    priceRange: "mid"
-  },
-  {
-    id: 3,
-    emoji: "🐠",
-    brand: "しあわせにゃんこ",
-    name: "サーモン＆ビタミン シニア専用",
-    price: 210,
-    age: "シニア",
-    health: ["関節ケア", "皮膚・被毛"],
-    avoidIngredients: ["穀物不使用", "牛肉不使用"],
-    origin: "国産",
-    priceRange: "mid"
-  },
-  {
-    id: 4,
-    emoji: "🥩",
-    brand: "ワイルドキャット",
-    name: "グレインフリー ラム＆サツマイモ",
-    price: 380,
-    age: "全年齢",
-    health: ["肥満ケア"],
-    avoidIngredients: ["穀物不使用", "鶏肉不使用", "魚不使用"],
-    origin: "輸入品",
-    priceRange: "high"
-  },
-  {
-    id: 5,
-    emoji: "🐡",
-    brand: "うちのこ一番",
-    name: "カツオ入り 尿路ケア成猫用",
-    price: 95,
-    age: "成猫",
-    health: ["尿路ケア"],
-    avoidIngredients: ["牛肉不使用"],
-    origin: "国産",
-    priceRange: "low"
-  },
-  {
-    id: 6,
-    emoji: "🦆",
-    brand: "ナチュラルペット",
-    name: "ダック＆えんどう豆 全年齢",
-    price: 450,
-    age: "全年齢",
-    health: ["皮膚・被毛", "肥満ケア"],
-    avoidIngredients: ["穀物不使用", "鶏肉不使用", "魚不使用"],
-    origin: "輸入品",
-    priceRange: "high"
-  },
-  {
-    id: 7,
-    emoji: "🐟",
-    brand: "ねこまんま",
-    name: "いわし＆かぼちゃ 毛玉スッキリ",
-    price: 75,
-    age: "成猫",
-    health: ["毛球ケア"],
-    avoidIngredients: ["穀物不使用", "牛肉不使用"],
-    origin: "国産",
-    priceRange: "low"
-  },
-  {
-    id: 8,
-    emoji: "🍼",
-    brand: "べびーにゃん",
-    name: "子猫のための完全栄養食",
-    price: 160,
-    age: "子猫",
-    health: ["皮膚・被毛"],
-    avoidIngredients: [],
-    origin: "国産",
-    priceRange: "mid"
-  },
-  {
-    id: 9,
-    emoji: "🎖️",
-    brand: "ロイヤルキャット",
-    name: "シニア腎臓サポート プレミアム",
-    price: 520,
-    age: "シニア",
-    health: ["尿路ケア", "関節ケア"],
-    avoidIngredients: ["穀物不使用", "牛肉不使用"],
-    origin: "輸入品",
-    priceRange: "high"
-  },
-  {
-    id: 10,
-    emoji: "🐾",
-    brand: "エブリデイにゃん",
-    name: "チキン＆まぐろ バランス食",
-    price: 68,
-    age: "全年齢",
-    health: ["毛球ケア", "尿路ケア"],
-    avoidIngredients: [],
-    origin: "国産",
-    priceRange: "low"
-  }
-];
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT6WpZ2qpB61jLAUN3pAR0mrHTv-IqJNTe_7r7YM5LCxHEOAB-VSTh4_Wkc1rXo45JUHRPv3tcFxDE0/pub?gid=0&single=true&output=csv';
 
-function getChecked(containerId) {
-  return [...document.querySelectorAll(`#${containerId} input:checked`)].map(el => el.value);
+let products = [];
+
+// CSVをパースしてオブジェクト配列に変換
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+  return lines.slice(1).map(line => {
+    // カンマ区切りだが、値の中にカンマがある場合に対応
+    const values = line.split(',').map(v => v.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = values[i] || '');
+    return obj;
+  }).filter(row => row.id); // idが空の行はスキップ
+}
+
+// CSV行をproductオブジェクトに変換
+function rowToProduct(row) {
+  const price = parseInt(row.price) || 0;
+  let priceRange = row.priceRange;
+  // priceRangeが空の場合は自動判定
+  if (!priceRange) {
+    priceRange = price <= 100 ? 'low' : price <= 300 ? 'mid' : 'high';
+  }
+  return {
+    id: row.id,
+    emoji: row.emoji || '🐾',
+    brand: row.brand || '',
+    name: row.name || '',
+    price: price,
+    priceRange: priceRange,
+    age: row.age || '全年齢',
+    health: row.health ? row.health.split('、').map(s => s.trim()).filter(Boolean) : [],
+    avoidIngredients: row.avoidIngredients ? row.avoidIngredients.split('、').map(s => s.trim()).filter(Boolean) : [],
+    origin: row.origin || '国産'
+  };
+}
+
+// スプレッドシートからデータ読み込み
+async function loadData() {
+  try {
+    const res = await fetch(SHEET_URL);
+    if (!res.ok) throw new Error('読み込み失敗');
+    const text = await res.text();
+    const rows = parseCSV(text);
+    products = rows.map(rowToProduct);
+    renderCards();
+  } catch (e) {
+    document.getElementById('cards').innerHTML =
+      '<div class="error-msg">⚠️ データの読み込みに失敗しました。<br>スプレッドシートの公開設定を確認してください。</div>';
+    document.getElementById('result-meta').textContent = '';
+  }
+}
+
+function getChecked(id) {
+  return [...document.querySelectorAll(`#${id} input:checked`)].map(el => el.value);
 }
 
 function filterProducts() {
-  const ages = getChecked('filter-age');
-  const healths = getChecked('filter-health');
-  const allergies = getChecked('filter-allergy');
-  const prices = getChecked('filter-price');
-  const origins = getChecked('filter-origin');
+  const ages     = getChecked('filter-age');
+  const healths  = getChecked('filter-health');
+  const allergies= getChecked('filter-allergy');
+  const prices   = getChecked('filter-price');
+  const origins  = getChecked('filter-origin');
 
   return products.filter(p => {
-    if (ages.length && !ages.includes(p.age)) return false;
-    if (healths.length && !healths.some(h => p.health.includes(h))) return false;
+    if (ages.length     && !ages.includes(p.age)) return false;
+    if (healths.length  && !healths.some(h => p.health.includes(h))) return false;
     if (allergies.length && !allergies.every(a => p.avoidIngredients.includes(a))) return false;
-    if (prices.length && !prices.includes(p.priceRange)) return false;
-    if (origins.length && !origins.includes(p.origin)) return false;
+    if (prices.length   && !prices.includes(p.priceRange)) return false;
+    if (origins.length  && !origins.includes(p.origin)) return false;
     return true;
   });
 }
@@ -464,8 +341,8 @@ function renderCards() {
       <div class="tags">
         <span class="tag tag-age">${p.age}</span>
         ${p.health.map(h => `<span class="tag tag-health">${h}</span>`).join('')}
-        ${p.origin === '国産' ? `<span class="tag tag-origin">🇯🇵 国産</span>` : `<span class="tag tag-origin">🌏 輸入</span>`}
-        ${p.avoidIngredients.includes('穀物不使用') ? `<span class="tag tag-allergy">穀物不使用</span>` : ''}
+        ${p.origin === '国産' ? '<span class="tag tag-origin">🇯🇵 国産</span>' : '<span class="tag tag-origin">🌏 輸入</span>'}
+        ${p.avoidIngredients.includes('穀物不使用') ? '<span class="tag tag-allergy">穀物不使用</span>' : ''}
       </div>
     </div>
   `).join('');
@@ -476,13 +353,11 @@ function resetFilters() {
   renderCards();
 }
 
-// チェックボックスに変更イベント
 document.querySelectorAll('.filter-option input').forEach(el => {
   el.addEventListener('change', renderCards);
 });
 
-// 初期表示
-renderCards();
+loadData();
 </script>
 </body>
 </html>
