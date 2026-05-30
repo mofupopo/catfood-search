@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>にゃんめし検索 🐾</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF6EC;
+    --warm: #F5E6C8;
+    --accent: #E07B39;
+    --accent2: #6BAE8E;
+    --dark: #2D2416;
+    --mid: #7A6347;
+    --light: #C9A97A;
+    --card-bg: #FFFBF4;
+    --tag-bg: #FFF0DC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ヘッダー */
+  header {
+    background: var(--dark);
+    padding: 28px 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, #E07B3930 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -20px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, #6BAE8E25 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .logo {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .logo span { color: var(--accent); }
+  .tagline {
+    font-size: 0.8rem;
+    color: var(--light);
+    margin-top: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  /* メインレイアウト */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 640px) {
+    .container { grid-template-columns: 1fr; }
+  }
+
+  /* サイドバー（フィルター） */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .filter-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 18px;
+    border: 1.5px solid var(--warm);
+    box-shadow: 0 2px 8px #2D241608;
+  }
+  .filter-title {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--mid);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-title .icon { font-size: 1rem; }
+  .filter-options { display: flex; flex-direction: column; gap: 8px; }
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.15s;
+    font-size: 0.88rem;
+  }
+  .filter-option:hover { background: var(--warm); }
+  .filter-option input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .reset-btn {
+    background: none;
+    border: 1.5px solid var(--light);
+    color: var(--mid);
+    border-radius: 99px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+  .reset-btn:hover {
+    background: var(--warm);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* メインエリア */
+  .main {}
+  .result-meta {
+    font-size: 0.82rem;
+    color: var(--mid);
+    margin-bottom: 14px;
+    padding: 0 2px;
+  }
+  .result-meta strong { color: var(--accent); }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 18px;
+    border: 1.5px solid var(--warm);
+    box-shadow: 0 2px 10px #2D241608;
+    transition: transform 0.18s, box-shadow 0.18s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px #2D241614;
+  }
+
+  .card-emoji {
+    font-size: 2.2rem;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .card-brand {
+    font-size: 0.72rem;
+    color: var(--light);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .card-name {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.4;
+  }
+  .card-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .card-price span { font-size: 0.72rem; color: var(--mid); font-weight: 400; }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 2px;
+  }
+  .tag {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .tag-age    { background: #FFF0DC; color: #A0610A; }
+  .tag-health { background: #E6F5EE; color: #2E7D55; }
+  .tag-origin { background: #EDF0FF; color: #3D5199; }
+  .tag-allergy { background: #FDECEA; color: #A83228; }
+
+  .no-result {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mid);
+  }
+  .no-result .big { font-size: 3rem; }
+  .no-result p { margin-top: 10px; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>にゃん</span>めし検索 🐾</div>
+  <div class="tagline">愛猫にぴったりのごはんを見つけよう</div>
+</header>
+
+<div class="container">
+  <!-- フィルターパネル -->
+  <aside class="sidebar">
+
+    <div class="filter-card">
+      <div class="filter-title"><span class="icon">🐱</span> 年齢・ライフステージ</div>
+      <div class="filter-options" id="filter-age">
+        <label class="filter-option"><input type="checkbox" value="子猫">子猫（〜1歳）</label>
+        <label class="filter-option"><input type="checkbox" value="成猫">成猫（1〜7歳）</label>
+        <label class="filter-option"><input type="checkbox" value="シニア">シニア（7歳〜）</label>
+        <label class="filter-option"><input type="checkbox" value="全年齢">全年齢対応</label>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <div class="filter-title"><span class="icon">💪</span> 健康上の悩み</div>
+      <div class="filter-options" id="filter-health">
+        <label class="filter-option"><input type="checkbox" value="肥満ケア">肥満ケア</label>
+        <label class="filter-option"><input type="checkbox" value="毛球ケア">毛球ケア</label>
+        <label class="filter-option"><input type="checkbox" value="尿路ケア">尿路ケア</label>
+        <label class="filter-option"><input type="checkbox" value="関節ケア">関節ケア</label>
+        <label class="filter-option"><input type="checkbox" value="皮膚・被毛">皮膚・被毛</label>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <div class="filter-title"><span class="icon">🚫</span> 避けたい食材</div>
+      <div class="filter-options" id="filter-allergy">
+        <label class="filter-option"><input type="checkbox" value="穀物不使用">穀物不使用</label>
+        <label class="filter-option"><input type="checkbox" value="牛肉不使用">牛肉不使用</label>
+        <label class="filter-option"><input type="checkbox" value="鶏肉不使用">鶏肉不使用</label>
+        <label class="filter-option"><input type="checkbox" value="魚不使用">魚不使用</label>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <div class="filter-title"><span class="icon">💰</span> 価格帯（1食あたり）</div>
+      <div class="filter-options" id="filter-price">
+        <label class="filter-option"><input type="checkbox" value="low">〜100円</label>
+        <label class="filter-option"><input type="checkbox" value="mid">100〜300円</label>
+        <label class="filter-option"><input type="checkbox" value="high">300円〜</label>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <div class="filter-title"><span class="icon">🌏</span> 産地</div>
+      <div class="filter-options" id="filter-origin">
+        <label class="filter-option"><input type="checkbox" value="国産">国産</label>
+        <label class="filter-option"><input type="checkbox" value="輸入品">輸入品</label>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetFilters()">🔄 フィルターをリセット</button>
+  </aside>
+
+  <!-- 商品一覧 -->
+  <main class="main">
+    <div class="result-meta" id="result-meta"></div>
+    <div class="cards" id="cards"></div>
+  </main>
+</div>
+
+<script>
+const products = [
+  {
+    id: 1,
+    emoji: "🐟",
+    brand: "ねこまんま",
+    name: "まぐろ贅沢仕立て 成猫用",
+    price: 89,
+    age: "成猫",
+    health: ["毛球ケア", "皮膚・被毛"],
+    avoidIngredients: ["穀物不使用"],
+    origin: "国産",
+    priceRange: "low"
+  },
+  {
+    id: 2,
+    emoji: "🍗",
+    brand: "キャットプレミアム",
+    name: "チキン＆野菜 子猫用",
+    price: 120,
+    age: "子猫",
+    health: ["皮膚・被毛"],
+    avoidIngredients: ["魚不使用"],
+    origin: "輸入品",
+    priceRange: "mid"
+  },
+  {
+    id: 3,
+    emoji: "🐠",
+    brand: "しあわせにゃんこ",
+    name: "サーモン＆ビタミン シニア専用",
+    price: 210,
+    age: "シニア",
+    health: ["関節ケア", "皮膚・被毛"],
+    avoidIngredients: ["穀物不使用", "牛肉不使用"],
+    origin: "国産",
+    priceRange: "mid"
+  },
+  {
+    id: 4,
+    emoji: "🥩",
+    brand: "ワイルドキャット",
+    name: "グレインフリー ラム＆サツマイモ",
+    price: 380,
+    age: "全年齢",
+    health: ["肥満ケア"],
+    avoidIngredients: ["穀物不使用", "鶏肉不使用", "魚不使用"],
+    origin: "輸入品",
+    priceRange: "high"
+  },
+  {
+    id: 5,
+    emoji: "🐡",
+    brand: "うちのこ一番",
+    name: "カツオ入り 尿路ケア成猫用",
+    price: 95,
+    age: "成猫",
+    health: ["尿路ケア"],
+    avoidIngredients: ["牛肉不使用"],
+    origin: "国産",
+    priceRange: "low"
+  },
+  {
+    id: 6,
+    emoji: "🦆",
+    brand: "ナチュラルペット",
+    name: "ダック＆えんどう豆 全年齢",
+    price: 450,
+    age: "全年齢",
+    health: ["皮膚・被毛", "肥満ケア"],
+    avoidIngredients: ["穀物不使用", "鶏肉不使用", "魚不使用"],
+    origin: "輸入品",
+    priceRange: "high"
+  },
+  {
+    id: 7,
+    emoji: "🐟",
+    brand: "ねこまんま",
+    name: "いわし＆かぼちゃ 毛玉スッキリ",
+    price: 75,
+    age: "成猫",
+    health: ["毛球ケア"],
+    avoidIngredients: ["穀物不使用", "牛肉不使用"],
+    origin: "国産",
+    priceRange: "low"
+  },
+  {
+    id: 8,
+    emoji: "🍼",
+    brand: "べびーにゃん",
+    name: "子猫のための完全栄養食",
+    price: 160,
+    age: "子猫",
+    health: ["皮膚・被毛"],
+    avoidIngredients: [],
+    origin: "国産",
+    priceRange: "mid"
+  },
+  {
+    id: 9,
+    emoji: "🎖️",
+    brand: "ロイヤルキャット",
+    name: "シニア腎臓サポート プレミアム",
+    price: 520,
+    age: "シニア",
+    health: ["尿路ケア", "関節ケア"],
+    avoidIngredients: ["穀物不使用", "牛肉不使用"],
+    origin: "輸入品",
+    priceRange: "high"
+  },
+  {
+    id: 10,
+    emoji: "🐾",
+    brand: "エブリデイにゃん",
+    name: "チキン＆まぐろ バランス食",
+    price: 68,
+    age: "全年齢",
+    health: ["毛球ケア", "尿路ケア"],
+    avoidIngredients: [],
+    origin: "国産",
+    priceRange: "low"
+  }
+];
+
+function getChecked(containerId) {
+  return [...document.querySelectorAll(`#${containerId} input:checked`)].map(el => el.value);
+}
+
+function filterProducts() {
+  const ages = getChecked('filter-age');
+  const healths = getChecked('filter-health');
+  const allergies = getChecked('filter-allergy');
+  const prices = getChecked('filter-price');
+  const origins = getChecked('filter-origin');
+
+  return products.filter(p => {
+    if (ages.length && !ages.includes(p.age)) return false;
+    if (healths.length && !healths.some(h => p.health.includes(h))) return false;
+    if (allergies.length && !allergies.every(a => p.avoidIngredients.includes(a))) return false;
+    if (prices.length && !prices.includes(p.priceRange)) return false;
+    if (origins.length && !origins.includes(p.origin)) return false;
+    return true;
+  });
+}
+
+function renderCards() {
+  const results = filterProducts();
+  const container = document.getElementById('cards');
+  const meta = document.getElementById('result-meta');
+
+  meta.innerHTML = `<strong>${results.length}件</strong>のフードが見つかりました`;
+
+  if (results.length === 0) {
+    container.innerHTML = `
+      <div class="no-result">
+        <div class="big">🐱</div>
+        <p>条件に合うフードが見つかりませんでした。<br>フィルターを変えてみてください。</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = results.map(p => `
+    <div class="product-card">
+      <div class="card-emoji">${p.emoji}</div>
+      <div>
+        <div class="card-brand">${p.brand}</div>
+        <div class="card-name">${p.name}</div>
+      </div>
+      <div class="card-price">¥${p.price}<span> / 1食</span></div>
+      <div class="tags">
+        <span class="tag tag-age">${p.age}</span>
+        ${p.health.map(h => `<span class="tag tag-health">${h}</span>`).join('')}
+        ${p.origin === '国産' ? `<span class="tag tag-origin">🇯🇵 国産</span>` : `<span class="tag tag-origin">🌏 輸入</span>`}
+        ${p.avoidIngredients.includes('穀物不使用') ? `<span class="tag tag-allergy">穀物不使用</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function resetFilters() {
+  document.querySelectorAll('.filter-option input').forEach(el => el.checked = false);
+  renderCards();
+}
+
+// チェックボックスに変更イベント
+document.querySelectorAll('.filter-option input').forEach(el => {
+  el.addEventListener('change', renderCards);
+});
+
+// 初期表示
+renderCards();
+</script>
+</body>
+</html>
