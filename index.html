@@ -136,7 +136,7 @@ function filterProducts() {
 
   return products.filter(p => {
     if (ages.length     && !ages.includes(p.age)) return false;
-    if (healths.length  && !healths.some(h => p.health.includes(h))) return false;
+    if (ages.length     && !ages.some(a => p.age.includes(a))) return false;
     if (allergies.length && !allergies.every(a => p.avoidIngredients.includes(a))) return false;
     if (prices.length   && !prices.includes(p.priceRange)) return false;
     if (origins.length  && !origins.includes(p.origin)) return false;
