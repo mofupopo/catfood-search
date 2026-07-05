@@ -78,8 +78,23 @@ function parseCSV(text) {
   const lines = text.trim().split('\n');
   const headers = lines[0].split(',').map(h => h.trim());
   return lines.slice(1).map(line => {
-    // カンマ区切りだが、値の中にカンマがある場合に対応
-    const values = line.split(',').map(v => v.trim());
+    // 💡 カンマ区切りのセルに対応するため、簡易的なクォート解析を導入
+    let values = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      let char = line[i];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    values.push(current.trim());
+    
     const obj = {};
     headers.forEach((h, i) => obj[h] = values[i] || '');
     return obj;
@@ -90,10 +105,16 @@ function parseCSV(text) {
 function rowToProduct(row) {
   const price = parseInt(row.price) || 0;
   let priceRange = row.priceRange;
-  // priceRangeが空の場合は自動判定
   if (!priceRange) {
     priceRange = price <= 100 ? 'low' : price <= 300 ? 'mid' : 'high';
   }
+  
+  // 💡 読み込み段階で、あらゆるスペースを消し、「、」や「,」で完璧にバラバラにします
+  const cleanSplit = (str) => {
+    if (!str || str === '0' || str === 0) return [];
+    return str.toString().replace(/[\s\u3000]/g, '').split(/[、,，]/).filter(Boolean);
+  };
+
   return {
     id: row.id,
     brand: row.brand || '',
@@ -101,8 +122,8 @@ function rowToProduct(row) {
     price: price,
     priceRange: priceRange,
     age: row.age || '全年齢',
-    health: row.health ? row.health.split('、').map(s => s.trim()).filter(Boolean) : [],
-    avoidIngredients: row.avoidIngredients ? row.avoidIngredients.split('、').map(s => s.trim()).filter(Boolean) : [],
+    health: cleanSplit(row.health),
+    avoidIngredients: cleanSplit(row.avoidIngredients),
     origin: row.origin || '国産'
   };
 }
@@ -134,26 +155,21 @@ function filterProducts() {
   const prices   = getChecked('filter-price');
   const origins  = getChecked('filter-origin');
 
-return products.filter(p => {
-    // 1. 年齢・ライフステージの絞り込み（「、」や「,」のあらゆる区切りに対応）
+  return products.filter(p => {
+    // 1. 年齢の絞り込み
     if (ages.length) {
-      if (!p.age) return false;
-      const productAges = p.age.toString().replace(/[\s\u3000]/g, '').split(/[、,，]/);
+      const productAges = Array.isArray(p.age) ? p.age : [p.age];
       if (!ages.some(a => productAges.includes(a))) return false;
     }
     
-    // 2. 健康上の悩みの絞り込み（「、」や「,」のあらゆる区切りに対応！）
+    // 2. 健康上の悩みの絞り込み
     if (healths.length) {
-      if (!p.health || p.health === 0 || p.health === '0') return false;
-      const productHealths = p.health.toString().replace(/[\s\u3000]/g, '').split(/[、,，]/);
-      if (!healths.some(h => productHealths.includes(h))) return false;
+      if (!healths.some(h => p.health.includes(h))) return false;
     }
     
     // 3. 避けたい食材の絞り込み
     if (allergies.length) {
-      if (!p.avoidIngredients) return false;
-      const productAllergies = p.avoidIngredients.toString();
-      if (!allergies.every(a => productAllergies.includes(a))) return false;
+      if (!allergies.every(a => p.avoidIngredients.includes(a))) return false;
     }
     
     // 4. 価格帯の絞り込み
@@ -172,8 +188,6 @@ function renderCards() {
   const meta = document.getElementById('result-meta');
   
   meta.innerHTML = `<strong>${results.length}</strong>件のフードが見つかりました`;
-
-  
 
   if (results.length === 0) {
     container.innerHTML = `
