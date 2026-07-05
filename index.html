@@ -134,12 +134,22 @@ function filterProducts() {
   const prices   = getChecked('filter-price');
   const origins  = getChecked('filter-origin');
 
-  return products.filter(p => {
-    if (ages.length     && !ages.includes(p.age)) return false;
-    if (ages.length     && !ages.some(a => p.age.includes(a))) return false;
-    if (allergies.length && !allergies.every(a => p.avoidIngredients.includes(a))) return false;
-    if (prices.length   && !prices.includes(p.priceRange)) return false;
-    if (origins.length  && !origins.includes(p.origin)) return false;
+return products.filter(p => {
+    // 1. 年齢・ライフステージの絞り込み（「、」区切りに対応）
+    if (ages.length && !ages.some(a => p.age && p.age.split('、').includes(a))) return false;
+    
+    // 2. 健康上の悩みの絞り込み（「、」区切りに対応）
+    if (healths.length && !healths.some(h => p.health && p.health.split('、').includes(h))) return false;
+    
+    // 3. 避けたい食材の絞り込み
+    if (allergies.length && !allergies.every(a => p.avoidIngredients && p.avoidIngredients.includes(a))) return false;
+    
+    // 4. 価格帯の絞り込み
+    if (prices.length && !prices.includes(p.priceRange)) return false;
+    
+    // 5. 産地の絞り込み
+    if (origins.length && !origins.includes(p.origin)) return false;
+    
     return true;
   });
 }
