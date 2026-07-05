@@ -138,14 +138,15 @@ return products.filter(p => {
     // 1. 年齢・ライフステージの絞り込み
     if (ages.length) {
       if (!p.age) return false;
-      const productAges = p.age.toString().split('、').map(s => s.trim());
+      const productAges = p.age.toString().split('、').map(s => s.replace(/[\s\u3000]/g, ''));
       if (!ages.some(a => productAges.includes(a))) return false;
     }
     
-    // 2. 健康上の悩みの絞り込み（数字の0や空っぽでも絶対にエラーにならない対策版）
+    // 2. 健康上の悩みの絞り込み（全角・半角スペースを完全に消去して比較）
     if (healths.length) {
       if (!p.health || p.health === 0 || p.health === '0') return false;
-      const productHealths = p.health.toString().split('、').map(s => s.trim());
+      // セル内の文字から「すべての空白（全角・半角）」を完全に消去して「、」でバラします
+      const productHealths = p.health.toString().replace(/[\s\u3000]/g, '').split('、');
       if (!healths.some(h => productHealths.includes(h))) return false;
     }
     
@@ -162,6 +163,7 @@ return products.filter(p => {
     // 5. 産地の絞り込み
     if (origins.length && !origins.includes(p.origin)) return false;
     
+    // すべての条件をクリアしたら表示
     return true;
   });
 }
