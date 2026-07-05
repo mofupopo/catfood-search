@@ -162,10 +162,8 @@ function renderCards() {
 
   container.innerHTML = results.map(p => `
     <div class="product-card">
-      <div>
-        <div class="card-brand">${p.brand}</div>
-        <div class="card-name">${p.name}</div>
-      </div>
+      <div class="card-brand">${p.brand}</div>
+      <div class="card-name">${p.name}</div>
       <div class="card-price">¥${p.price}<span> / 1食</span></div>
       <div class="tags">
         <span class="tag tag-age">${p.age}</span>
