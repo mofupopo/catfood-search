@@ -96,7 +96,6 @@ function rowToProduct(row) {
   }
   return {
     id: row.id,
-    emoji: row.emoji || '🐾',
     brand: row.brand || '',
     name: row.name || '',
     price: price,
@@ -163,7 +162,6 @@ function renderCards() {
 
   container.innerHTML = results.map(p => `
     <div class="product-card">
-      <div class="card-emoji">${p.emoji}</div>
       <div>
         <div class="card-brand">${p.brand}</div>
         <div class="card-name">${p.name}</div>
