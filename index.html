@@ -172,8 +172,16 @@ function renderCards() {
   const results = filterProducts();
   const container = document.getElementById('cards');
   const meta = document.getElementById('result-meta');
+  
+  // ★データの中に「毛玉」という文字がどう入っているか、画面に強制表示させるコード
+  const target = products.find(p => p.name && p.name.includes('セレクトバランス'));
+  if (target) {
+    alert("データ側の文字はこれです➔「" + target.health + "」");
+  }
 
-  meta.innerHTML = `<strong>${results.length}件</strong>のフードが見つかりました`;
+  meta.innerHTML = `<strong>${results.length}</strong>件のフードが見つかりました`;
+
+  
 
   if (results.length === 0) {
     container.innerHTML = `
