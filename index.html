@@ -135,22 +135,26 @@ function filterProducts() {
   const origins  = getChecked('filter-origin');
 
 return products.filter(p => {
-    // 1. 年齢・ライフステージの絞り込み（スペースを除去して「、」で分解）
+    // 1. 年齢・ライフステージの絞り込み
     if (ages.length) {
       if (!p.age) return false;
-      const productAges = p.age.split('、').map(s => s.trim());
+      const productAges = p.age.toString().split('、').map(s => s.trim());
       if (!ages.some(a => productAges.includes(a))) return false;
     }
     
-    // 2. 健康上の悩みの絞り込み（スペースを除去して「、」で分解）
+    // 2. 健康上の悩みの絞り込み（数字の0や空っぽでも絶対にエラーにならない対策版）
     if (healths.length) {
-      if (!p.health) return false;
-      const productHealths = p.health.split('、').map(s => s.trim());
+      if (!p.health || p.health === 0 || p.health === '0') return false;
+      const productHealths = p.health.toString().split('、').map(s => s.trim());
       if (!healths.some(h => productHealths.includes(h))) return false;
     }
     
     // 3. 避けたい食材の絞り込み
-    if (allergies.length && !allergies.every(a => p.avoidIngredients && p.avoidIngredients.includes(a))) return false;
+    if (allergies.length) {
+      if (!p.avoidIngredients) return false;
+      const productAllergies = p.avoidIngredients.toString();
+      if (!allergies.every(a => productAllergies.includes(a))) return false;
+    }
     
     // 4. 価格帯の絞り込み
     if (prices.length && !prices.includes(p.priceRange)) return false;
