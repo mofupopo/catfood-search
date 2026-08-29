@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="filter-card">
-      <div class="filter-title"><span>💰</span> 価格帯（1kgあたり）</div>
+      <div class="filter-title"><span>💰</span> 価格帯（1kgあたり）※販売店によって変わるので参考までに※</div>
       <div class="filter-options" id="filter-price">
         <label class="filter-option"><input type="checkbox" value="low">〜1000円</label>
         <label class="filter-option"><input type="checkbox" value="mid">1001〜3000円</label>
@@ -202,7 +202,7 @@ function renderCards() {
     <div class="product-card">
       <div class="card-brand">${p.brand}</div>
       <div class="card-name">${p.name}</div>
-      <div class="card-price">¥${p.price}<span> / 1食</span></div>
+      <div class="card-price">¥${p.price}<span> / 1kg</span></div>
       <div class="tags">
         <span class="tag tag-age">${p.age}</span>
         ${p.health.map(h => `<span class="tag tag-health">${h}</span>`).join('')}
